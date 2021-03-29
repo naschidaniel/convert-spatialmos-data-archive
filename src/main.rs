@@ -1,6 +1,6 @@
 /* A data converter for converting archived data into the new spatialMOS format */
 
-use chrono::NaiveDateTime;
+use chrono::{Local, NaiveDateTime};
 use core::panic;
 use csv;
 use serde::Deserialize;
@@ -9,7 +9,6 @@ use std::fs;
 use std::io::Error;
 use std::path::Path;
 use std::process::Command;
-
 #[derive(Deserialize)]
 struct ReadZamgRecord {
     timestamp_download: String,
@@ -121,6 +120,7 @@ fn untar_archive_files(data_provider: &String, year: &String) -> Result<(), Erro
 }
 
 fn main() {
+    let start_time = Local::now().time();
     let args: Vec<String> = env::args().collect();
     let data_provider = &args[1];
     let year = &args[2];
@@ -175,6 +175,9 @@ fn main() {
             };
         }
     }
+    let end_time = Local::now().time();
+    let diff = end_time - start_time;
+    println!("Total time in Seconds {}", diff.num_seconds());
 }
 
 #[cfg(test)]
