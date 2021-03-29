@@ -7,8 +7,8 @@ use serde::Deserialize;
 use std::env;
 use std::fs;
 use std::io::Error;
-use std::process::Command;
 use std::path::Path;
+use std::process::Command;
 
 #[derive(Deserialize)]
 struct ReadZamgRecord {
@@ -95,7 +95,10 @@ fn untar_archive_files(data_provider: &String, year: &String) -> Result<(), Erro
     for path in fs::read_dir(archive_path)? {
         let entry = path?;
         let filename = entry.file_name().into_string().unwrap();
-        if filename.contains(data_provider) && filename.contains(year) && filename.contains("tar.gz") {
+        if filename.contains(data_provider)
+            && filename.contains(year)
+            && filename.contains("tar.gz")
+        {
             println!("The file {} is unpacked", filename);
             let tar_file = archive_path.join(filename);
             Command::new("tar")
@@ -104,7 +107,7 @@ fn untar_archive_files(data_provider: &String, year: &String) -> Result<(), Erro
                 .output()
                 .expect("failed to execute process");
         }
-    };
+    }
 
     for path in fs::read_dir("./data/")? {
         let entry = path?;
@@ -112,8 +115,8 @@ fn untar_archive_files(data_provider: &String, year: &String) -> Result<(), Erro
         if filename.contains(".html.tmp") {
             fs::remove_file(entry.path())?;
         };
-    };
-    
+    }
+
     Ok(())
 }
 
@@ -140,10 +143,24 @@ fn main() {
         panic!("The year {} can not be found in {:?}", year, year_available);
     }
 
-    untar_archive_files(data_provider, year);
+    let handle_untar = untar_archive_files(data_provider, year);
+    match handle_untar {
+        Ok(_) => println!("All files have been unpacked"),
+        Err(err) => panic!("Something went wrong! {}", err),
+    }
 
     if data_provider == "zamg" {
-        let federal_state: [&str; 9] = ["burgenland", "kaernten", "niederoesterreich", "oberoesterreich", "salzburg", "steiermark", "tirol", "vorarlberg", "wien"];
+        let federal_state: [&str; 9] = [
+            "burgenland",
+            "kaernten",
+            "niederoesterreich",
+            "oberoesterreich",
+            "salzburg",
+            "steiermark",
+            "tirol",
+            "vorarlberg",
+            "wien",
+        ];
 
         for state in federal_state.iter() {
             let path = format!("./{}_{}_{}.csv", data_provider, state, year);
@@ -152,13 +169,12 @@ fn main() {
             match handle_result {
                 Ok(()) => println!("Data conversion completed"),
                 Err(error) => {
-                    println!("Something went wrong! {:?}", error);
+                    println!("Something went wrong! {}", error);
                     continue;
-                },
+                }
             };
         }
     }
-
 }
 
 #[cfg(test)]
