@@ -30,5 +30,9 @@ pub fn untar_archive_files(data_provider: &str, year: &str) -> Result<(), Error>
         };
     }
 
+    if Path::new("./orig").exists() {
+        fs::remove_dir_all("./orig")?;
+    }
+
     Ok(())
 }
