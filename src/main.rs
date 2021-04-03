@@ -1,5 +1,6 @@
 /* A data converter for converting archived data into the new spatialMOS format */
 
+mod lwd;
 mod util;
 mod zamg;
 
@@ -17,7 +18,7 @@ fn main() {
     println!("Converting data_provider {}", data_provider);
 
     // Check Input arg data_provider
-    let data_provider_available: [String; 1] = ["zamg".to_string()];
+    let data_provider_available: [String; 2] = ["zamg".to_string(), "lwd".to_string()];
     if !data_provider_available.contains(data_provider) {
         panic!(
             "The data_provider {} can not be found in {:?}",
@@ -31,6 +32,7 @@ fn main() {
         panic!("The year {} can not be found in {:?}", year, year_available);
     }
 
+    // Untar all archived files
     let handle_untar = util::untar_archive_files(data_provider, year);
     match handle_untar {
         Ok(_) => println!("All files have been unpacked"),
@@ -39,6 +41,8 @@ fn main() {
 
     if data_provider == "zamg" {
         zamg::run(data_provider, year)
+    } else if data_provider == "lwd" {
+        lwd::run(data_provider, year)
     }
     let end_time = Local::now().time();
     let diff = end_time - start_time;

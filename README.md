@@ -14,5 +14,6 @@ Convert archived data from the data providers `zamg`, `lwd` and `gefs` into the 
 The archive folder must be placed in `./data`.
 
 ```
+cargo run lwd 2020
 cargo run zamg 2020
 ```
