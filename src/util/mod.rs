@@ -3,7 +3,7 @@ use std::io::Error;
 use std::path::Path;
 use std::process::Command;
 
-pub fn untar_archive_files(data_provider: &String, year: &String) -> Result<(), Error> {
+pub fn untar_archive_files(data_provider: &str, year: &str) -> Result<(), Error> {
     let archive_path = Path::new("./data/archive/");
     for path in fs::read_dir(archive_path)? {
         let entry = path?;

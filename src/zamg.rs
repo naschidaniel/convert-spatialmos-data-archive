@@ -1,6 +1,5 @@
 use chrono::NaiveDateTime;
 
-use csv;
 use serde::Deserialize;
 use std::fs;
 use std::path::Path;
@@ -21,7 +20,7 @@ struct ReadZamgRecord {
 }
 
 fn append_zamg_record(
-    path: &String,
+    path: &str,
     writer: &mut csv::Writer<std::fs::File>,
 ) -> Result<(), csv::Error> {
     let mut reader = csv::Reader::from_path(&path)?;
@@ -48,7 +47,7 @@ fn append_zamg_record(
     Ok(())
 }
 
-fn write_zamg(path: String, state: &String, year: &String) -> Result<(), csv::Error> {
+fn write_zamg(path: String, state: &str, year: &str) -> Result<(), csv::Error> {
     let mut writer = csv::WriterBuilder::new().delimiter(b';').from_path(path)?;
 
     writer.write_record(&[
@@ -80,7 +79,7 @@ fn write_zamg(path: String, state: &String, year: &String) -> Result<(), csv::Er
     Ok(())
 }
 
-pub fn run(data_provider: &String, year: &String) {
+pub fn run(data_provider: &str, year: &str) {
     let federal_state: [&str; 9] = [
         "burgenland",
         "kaernten",
