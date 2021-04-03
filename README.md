@@ -1,5 +1,7 @@
 # Convert-SpatialMOS-data-archive
 
+![check](https://github.com/naschidaniel/convert-spatialmos-data-archive/actions/workflows/check_test_lint.yml/badge.svg?name=check) ![lint](https://github.com/naschidaniel/convert-spatialmos-data-archive/actions/workflows/check_test_lint.yml/badge.svg?name=lint) ![test](https://github.com/naschidaniel/convert-spatialmos-data-archive/actions/workflows/check_test_lint.yml/badge.svg?name=test)
+
 ## Purpose
 
 Convert archived data from the data providers `zamg`, `lwd` and `gefs` into the new spatialMOS format.
