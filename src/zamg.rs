@@ -47,7 +47,7 @@ fn append_zamg_record(
     Ok(())
 }
 
-fn write_zamg(path: String, state: &str, year: &str) -> Result<(), csv::Error> {
+fn write_zamg(path: String, state: &str) -> Result<(), csv::Error> {
     let mut writer = csv::WriterBuilder::new().delimiter(b';').from_path(path)?;
 
     writer.write_record(&[
@@ -71,7 +71,7 @@ fn write_zamg(path: String, state: &str, year: &str) -> Result<(), csv::Error> {
     for path in fs::read_dir("./data/")? {
         let entry = path?;
         let filename = entry.file_name().into_string().unwrap();
-        if filename.contains(state) && filename.contains(year) && filename.contains(".csv") {
+        if filename.contains(state) && filename.contains(".csv") {
             let file = entry.path().into_os_string().into_string().unwrap();
             append_zamg_record(&file, &mut writer)?;
         }
@@ -79,7 +79,7 @@ fn write_zamg(path: String, state: &str, year: &str) -> Result<(), csv::Error> {
     Ok(())
 }
 
-pub fn run(data_provider: &str, year: &str) {
+pub fn run(data_provider: &str) {
     let federal_state: [&str; 9] = [
         "burgenland",
         "kaernten",
@@ -93,9 +93,9 @@ pub fn run(data_provider: &str, year: &str) {
     ];
 
     for state in federal_state.iter() {
-        let path = format!("./{}_{}_{}.csv", data_provider, state, year);
+        let path = format!("./{}_{}.csv", data_provider, state);
         println!("Converting data for {}", path);
-        let handle_result = write_zamg(path, &state.to_string(), year);
+        let handle_result = write_zamg(path, &state.to_string());
         match handle_result {
             Ok(()) => println!("Data conversion completed"),
             Err(error) => {

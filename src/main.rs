@@ -12,7 +12,6 @@ fn main() {
     let start_time = Local::now().time();
     let args: Vec<String> = env::args().collect();
     let data_provider = &args[1];
-    let year = &args[2];
 
     println!("Converting year {}", &args[1]);
     println!("Converting data_provider {}", data_provider);
@@ -26,23 +25,17 @@ fn main() {
         );
     }
 
-    // Check Input arg year
-    let year_available: [String; 2] = ["2020".to_string(), "2021".to_string()];
-    if !year_available.contains(year) {
-        panic!("The year {} can not be found in {:?}", year, year_available);
-    }
-
     // Untar all archived files
-    let handle_untar = util::untar_archive_files(data_provider, year);
+    let handle_untar = util::untar_archive_files(data_provider);
     match handle_untar {
         Ok(_) => println!("All files have been unpacked"),
         Err(err) => panic!("Something went wrong! {}", err),
     }
 
     if data_provider == "zamg" {
-        zamg::run(data_provider, year)
+        zamg::run(data_provider)
     } else if data_provider == "lwd" {
-        lwd::run(data_provider, year)
+        lwd::run(data_provider)
     }
     let end_time = Local::now().time();
     let diff = end_time - start_time;

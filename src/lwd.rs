@@ -54,7 +54,7 @@ fn append_lwd_record(
     Ok(())
 }
 
-fn write_lwd(path: String, data_provider: &str, year: &str) -> Result<(), csv::Error> {
+fn write_lwd(path: String, data_provider: &str) -> Result<(), csv::Error> {
     let mut writer = csv::WriterBuilder::new().delimiter(b';').from_path(path)?;
 
     writer.write_record(&[
@@ -96,8 +96,7 @@ fn write_lwd(path: String, data_provider: &str, year: &str) -> Result<(), csv::E
     for path in fs::read_dir("./data/")? {
         let entry = path?;
         let filename = entry.file_name().into_string().unwrap();
-        if filename.contains(data_provider) && filename.contains(year) && filename.contains(".csv")
-        {
+        if filename.contains(data_provider) && filename.contains(".csv") {
             let file = entry.path().into_os_string().into_string().unwrap();
             append_lwd_record(&file, &mut writer)?;
         }
@@ -105,10 +104,10 @@ fn write_lwd(path: String, data_provider: &str, year: &str) -> Result<(), csv::E
     Ok(())
 }
 
-pub fn run(data_provider: &str, year: &str) {
-    let path = format!("./{}_{}.csv", data_provider, year);
+pub fn run(data_provider: &str) {
+    let path = format!("./{}.csv", data_provider);
     println!("Converting data for {}", path);
-    let handle_result = write_lwd(path, data_provider, year);
+    let handle_result = write_lwd(path, data_provider);
     match handle_result {
         Ok(()) => println!("Data conversion completed"),
         Err(error) => {
